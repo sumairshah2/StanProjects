@@ -7,16 +7,41 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyverse)
+library(rstan)
+library(devtools)
+
+
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r setup, include = FALSE}
+df <- read.csv("efron-morris-75-data.tsv", sep="\t");
+df <- with(df, data.frame(FirstName, LastName, 
+                          Hits, At.Bats, 
+                          RemainingAt.Bats,
+                          RemainingHits = SeasonHits - Hits));
+print(df)
 
-```{r carrs)s}
-summary(ca
+
 ```
 
-#
+``` {r}
+N <- dim(df)[1]
+K <- df$At.Bats
+y <- df$Hits
+K_new <- df$RemainingAt.Bats
+y_new <- df$RemainingHits
+
+```
+
+
+```{r}
+M <- 10000;
+
+fit_pool <- stan("train.stan", data=c("N", "K", "y", "K_new", "y_new"),
+                 iter=(M / 2), chains=4)
+
+```
