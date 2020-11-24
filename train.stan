@@ -1,4 +1,4 @@
-data {
+﻿data {
   int<lower=0> N;           // items
   int<lower=0> K[N];        // initial trials
   int<lower=0> y[N];        // initial successes
@@ -13,7 +13,6 @@ parameters {
 
 
 model {
-  ...
   y ~ binomial(K, phi);
 }
 

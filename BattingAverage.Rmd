@@ -43,5 +43,5 @@ M <- 10000;
 
 fit_pool <- stan("train.stan", data=c("N", "K", "y", "K_new", "y_new"),
                  iter=(M / 2), chains=4)
-
+extract(fit_pool)
 ```
